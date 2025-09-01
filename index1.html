@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaScript GitHub Badges Generator</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6e44ff;
+            --secondary: #b892ff;
+            --accent: #ff6b6b;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --light: #f0f0f0;
+            --gradient-start: #6e44ff;
+            --gradient-end: #ff6b6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .navbar-brand {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand span {
+            color: var(--accent);
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+        }
+        
+        .hero-content {
+            z-index: 10;
+            position: relative;
+        }
+        
+        .hero-title {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ccc;
+            max-width: 600px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+        
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 0.25rem rgba(110, 68, 255, 0.25);
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .badge-preview {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .code-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .threejs-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background: rgba(10, 10, 20, 0.8);
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Animation classes */
+        .animated-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="material-icons me-2">auto_awesome</i>
+                Aqua<span>Script</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#generator">Generator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#examples">Examples</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="threejs-container" id="threejs-canvas"></div>
+        <div id="particles-js"></div>
+        
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h1 class="hero-title">Create Beautiful GitHub Badges</h1>
+                    <p class="hero-subtitle">Generate stunning badges for your GitHub repositories with custom styles, colors, and animations. Impress your visitors with professional-looking badges.</p>
+                    <button class="btn btn-primary btn-lg" onclick="scrollToGenerator()">Get Started</button>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="card">
+                        <div class="card-header">Live Preview</div>
+                        <div class="card-body">
+                            <div class="badge-preview" id="badgePreview">
+                                <img src="https://img.shields.io/badge/AquaScript-Generator-blue" alt="Badge Preview" id="previewImg">
+                            </div>
+                            <div class="code-container">
+                                <button class="copy-btn" onclick="copyCode()">
+                                    <i class="material-icons">content_copy</i>
+                                </button>
+                                <code id="badgeCode">&lt;img src="https://img.shields.io/badge/AquaScript-Generator-blue" alt="Custom Badge"&gt;</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generator Section -->
+    <section class="py-5" id="generator">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">Customize Your Badge</h2>
+            
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="card p-4 h-100">
+                        <form id="badgeForm">
+                            <div class="mb-3">
+                                <label for="leftText" class="form-label">Left Text</label>
+                                <input type="text" class="form-control" id="leftText" value="AquaScript" oninput="updateBadge()">
+                            </div>
+                            <div class="mb-3">
+                                <label for="rightText" class="form-label">Right Text</label>
+                                <input type="text" class="form-control" id="rightText" value="Generator" oninput="updateBadge()">
+                            </div>
+                            <div class="mb-3">
+                                <label for="badgeColor" class="form-label">Badge Color</label>
+                                <select class="form-select" id="badgeColor" onchange="updateBadge()">
+                                    <option value="blue">Blue</option>
+                                    <option value="green">Green</option>
+                                    <option value="red">Red</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="pink">Pink</option>
+                                    <option value="lightgrey">Light Grey</option>
+                                    <option value="success">Success</option>
+                                    <option value="important">Important</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="badgeStyle" class="form-label">Badge Style</label>
+                                <select class="form-select" id="badgeStyle" onchange="updateBadge()">
+                                    <option value="plastic">Plastic</option>
+                                    <option value="flat">Flat</option>
+                                    <option value="flat-square">Flat Square</option>
+                                    <option value="for-the-badge">For the Badge</option>
+                                    <option value="social">Social</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="logo" class="form-label">Logo (optional)</label>
+                                <input type="text" class="form-control" id="logo" placeholder="e.g. github" oninput="updateBadge()">
+                            </div>
+                            <div class="mb-3">
+                                <label for="logoColor" class="form-label">Logo Color</label>
+                                <input type="color" class="form-control form-control-color" id="logoColor" value="#ffffff" oninput="updateBadge()">
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="isLink" onchange="updateBadge()">
+                                <label class="form-check-label" for="isLink">Add Link to Badge</label>
+                            </div>
+                            <div class="mb-3" id="linkContainer" style="display: none;">
+                                <label for="linkUrl" class="form-label">Link URL</label>
+                                <input type="url" class="form-control" id="linkUrl" placeholder="https://example.com" oninput="updateBadge()">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="card p-4 h-100">
+                        <h4 class="mb-3">Preview</h4>
+                        <div class="badge-preview d-flex justify-content-center align-items-center">
+                            <img src="" alt="Badge Preview" id="dynamicPreview">
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="mb-3">Embed Code</h4>
+                            <div class="code-container">
+                                <button class="copy-btn" onclick="copyDynamicCode()">
+                                    <i class="material-icons">content_copy</i>
+                                </button>
+                                <code id="dynamicCode"></code>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button class="btn btn-primary w-100" onclick="downloadBadge()">
+                                <i class="material-icons me-2">download</i> Download Badge
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section class="py-5 bg-dark" id="examples">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">Badge Examples</h2>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="card text-center p-3">
+                        <div class="card-body">
+                            <img src="https://img.shields.io/badge/JavaScript-ES6-yellow" alt="JavaScript Badge">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card text-center p-3">
+                        <div class="card-body">
+                            <img src="https://img.shields.io/badge/React-18.2-blue" alt="React Badge">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="card text-center p-3">
+                        <div class="card-body">
+                            <img src="https://img.shields.io/badge/Node.js-16.0-green" alt="Node.js Badge">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="card text-center p-3">
+                        <div class="card-body">
+                            <img src="https://img.shields.io/badge/License-MIT-brightgreen" alt="License Badge">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="card text-center p-3">
+                        <div class="card-body">
+                            <img src="https://img.shields.io/badge/Version-1.0.0-orange" alt="Version Badge">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="card text-center p-3">
+                        <div class="card-body">
+                            <img src="https://img.shields.io/badge/Downloads-10k+-purple" alt="Downloads Badge">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-5" id="about">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">About AquaScript</h2>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4" data-aos="fade-right">
+                    <div class="card p-4 h-100">
+                        <h3 class="mb-3">Why Choose Our Generator?</h3>
+                        <p>AquaScript GitHub Badges Generator provides a seamless experience for creating beautiful, professional badges for your projects.</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                <i class="material-icons me-2">check_circle</i> Easy to use interface
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                <i class="material-icons me-2">check_circle</i> Real-time preview
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                <i class="material-icons me-2">check_circle</i> Multiple styles and colors
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                <i class="material-icons me-2">check_circle</i> Custom logo support
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                <i class="material-icons me-2">check_circle</i> Copy and download options
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-left">
+                    <div class="card p-4 h-100">
+                        <h3 class="mb-3">How to Use</h3>
+                        <ol class="list-group list-group-numbered list-group-flush">
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                Enter the left and right text for your badge
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                Choose a color and style from the options
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                Optionally add a logo and set its color
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                Add a link if you want the badge to be clickable
+                            </li>
+                            <li class="list-group-item bg-transparent text-light border-light">
+                                Copy the code or download the badge image
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>AquaScript</h3>
+                    <p>Create beautiful GitHub badges for your projects.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>© 2025-2026 AquaScript. All rights reserved.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-light me-2"><i class="material-icons">code</i></a>
+                        <a href="#" class="text-light me-2"><i class="material-icons">public</i></a>
+                        <a href="#" class="text-light"><i class="material-icons">alternate_email</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mo-js/0.288.2/mo.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script> 
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Initialize Lenis for smooth scrolling
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#b892ff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#6e44ff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Simple Three.js background
+        function initThreeJS() {
+            const container = document.getElementById('threejs-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Add some floating shapes
+            const geometry = new THREE.IcosahedronGeometry(1, 0);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x6e44ff, 
+                shininess: 100,
+                transparent: true,
+                opacity: 0.5
+            });
+            
+            const shapes = [];
+            for (let i = 0; i < 10; i++) {
+                const shape = new THREE.Mesh(geometry, material);
+                shape.position.x = Math.random() * 20 - 10;
+                shape.position.y = Math.random() * 20 - 10;
+                shape.position.z = Math.random() * 20 - 10;
+                shape.rotation.x = Math.random() * Math.PI;
+                shape.rotation.y = Math.random() * Math.PI;
+                shape.scale.setScalar(Math.random() * 0.5 + 0.5);
+                scene.add(shape);
+                shapes.push(shape);
+            }
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x333333);
+            scene.add(ambientLight);
+            
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+            
+            camera.position.z = 5;
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                shapes.forEach(shape => {
+                    shape.rotation.x += 0.005;
+                    shape.rotation.y += 0.01;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize Three.js
+        initThreeJS();
+
+        // Badge generation functionality
+        function updateBadge() {
+            const leftText = document.getElementById('leftText').value || 'left';
+            const rightText = document.getElementById('rightText').value || 'right';
+            const badgeColor = document.getElementById('badgeColor').value;
+            const badgeStyle = document.getElementById('badgeStyle').value;
+            const logo = document.getElementById('logo').value;
+            const logoColor = document.getElementById('logoColor').value.substring(1); // Remove # from color
+            const isLink = document.getElementById('isLink').checked;
+            const linkUrl = document.getElementById('linkUrl').value;
+            
+            // Show/hide link URL field
+            document.getElementById('linkContainer').style.display = isLink ? 'block' : 'none';
+            
+            // Build the badge URL
+            let badgeUrl = `https://img.shields.io/badge/${encodeURIComponent(leftText)}-${encodeURIComponent(rightText)}-${badgeColor}?style=${badgeStyle}`;
+            
+            if (logo) {
+                badgeUrl += `&logo=${logo}&logoColor=${logoColor}`;
+            }
+            
+            // Update preview
+            document.getElementById('dynamicPreview').src = badgeUrl;
+            document.getElementById('dynamicPreview').alt = `${leftText} ${rightText} Badge`;
+            
+            // Update code
+            let code = `<img src="${badgeUrl}" alt="${leftText} ${rightText} Badge">`;
+            
+            if (isLink && linkUrl) {
+                code = `<a href="${linkUrl}">${code}</a>`;
+            }
+            
+            document.getElementById('dynamicCode').textContent = code;
+        }
+
+        function copyDynamicCode() {
+            const code = document.getElementById('dynamicCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Show success animation
+                anime({
+                    targets: '.copy-btn',
+                    scale: [1, 1.2, 1],
+                    duration: 300,
+                    easing: 'easeInOutQuad'
+                });
+            });
+        }
+
+        function downloadBadge() {
+            const badgeUrl = document.getElementById('dynamicPreview').src;
+            const link = document.createElement('a');
+            link.href = badgeUrl;
+            link.download = 'github-badge.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function scrollToGenerator() {
+            const generatorSection = document.getElementById('generator');
+            lenis.scrollTo(generatorSection);
+        }
+
+        // Show/hide link URL field based on checkbox
+        document.getElementById('isLink').addEventListener('change', function() {
+            document.getElementById('linkContainer').style.display = this.checked ? 'block' : 'none';
+            updateBadge();
+        });
+
+        // Initialize badge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBadge();
+            
+            // Add some animations with anime.js
+            anime({
+                targets: '.navbar-brand',
+                translateY: [-20, 0],
+                opacity: [0, 1],
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+            
+            anime({
+                targets: '.hero-title',
+                translateY: [100, 0],
+                opacity: [0, 1],
+                duration: 1500,
+                easing: 'easeOutExpo',
+                delay: 300
+            });
+            
+            anime({
+                targets: '.hero-subtitle',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 1500,
+                easing: 'easeOutExpo',
+                delay: 500
+            });
+            
+            // Typing effect with Typed.js
+            new Typed('#typed', {
+                strings: ["GitHub Badges", "Beautiful Shields", "Project Labels"],
+                typeSpeed: 50,
+                backSpeed: 30,
+                backDelay: 1500,
+                loop: true
+            });
+        });
+
+        // GSAP animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.card').forEach(card => {
+            gsap.fromTo(card, 
+                { y: 50, opacity: 0 },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    duration: 0.8, 
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        });
+    </script>
+</body>
+</html>
